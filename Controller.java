@@ -154,9 +154,9 @@ class handleClient extends Thread{
             }
             int temp=Shared.myqueue.remove();
             Socket sc=Shared.connections.get(temp);
-            //lock.unlock();
+            
             System.out.println("Window "+ windowNumber+" assigned to token #"+temp);
-
+            lock.unlock();
             //send window no.
             DataOutputStream co_cloutStream = new DataOutputStream(sc.getOutputStream());
             String clientMessage="Window "+ windowNumber+" assigned to token #"+temp ;   
@@ -169,7 +169,7 @@ class handleClient extends Thread{
             String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new java.util.Date());
             System.out.println("Token\tWindow\tTimeStamp\t\tService Time");
             System.out.println("=======================================================");
-            System.out.println(temp+"\t"+windowNumber+"\t"+timeStamp+"\t"+expectedTimeofCompletion);
+            System.out.println(temp+"\t"+windowNumber+"\t"+timeStamp+"\t"+expectedTimeofCompletion+" ms");
             
             Thread.sleep(expectedTimeofCompletion);
             
@@ -179,7 +179,7 @@ class handleClient extends Thread{
             clientMessage="Token #"+temp+" serviced. Window "+windowNumber+" freed!";   
             co_cloutStream.flush();
             co_cloutStream.writeUTF(clientMessage);
-            lock.unlock();
+            //lock.unlock();
         }catch (Exception e)
 		{
 			//System.out.println("Exception: "+e);
